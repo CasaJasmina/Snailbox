@@ -23,6 +23,8 @@
 WiFiClient client;
 
 int delayval = 500; // delay for half a second
+int ldrPin = A1;
+int threshold = 200; //threshold of LDR lecture
 
 /*
 
@@ -54,6 +56,7 @@ void setup()
   //************STARTING CONNECTION***************************
   //**********************************************************
   startConnection();
+
 }
 
 /*
@@ -71,60 +74,43 @@ uint16_t s = 0;
 void loop()
 {
   int mood = getPos();
+  if (analogRead(ldrPin) <= threshold) {
+    switch (mood){
 
-  switch (mood) {
 
-
-    //**********************
-    //relax mood, warm light
+      //**********************
+      //relax mood, warm light
     case 0:
-      {
-        Serial.println("relax");
-        //send_event("relax");
-        f = 0;
-        r = rainbow(20, r);;
-        break;
-      }
+    {
+      Serial.println("relax");
+      //send_event("relax");
+      f = 0;
+      r = rainbow(20, r);;
+      break;
+    }
 
 
     //**********************
     //focus mood, strong light
-    case 1:
-      {
-        Serial.println("focus");
-        //send_event("focus");
-        r = 0;
-        f = focus(f);
-        break;
-      }
+  case 1:
+    {
+      Serial.println("focus");
+      //send_event("focus");
+      r = 0;
+      f = focus(f);
+      break;
+    }
 
 
     //**********************
     //Sprint  mood, rainbow light
-    case 2:
-      {
-        Serial.println("Sprint");
-        //send_event("sprint");
-        s = sprint(s);
-        break;
-      }
+  case 2:
+    {
+      Serial.println("Sprint");
+      //send_event("sprint");
+      s = sprint(s);
+      break;
+    }
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
