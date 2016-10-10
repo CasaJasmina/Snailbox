@@ -22,9 +22,9 @@
 
 WiFiClient client;
 
-int delayval = 500; // delay for half a second
+int delayval = 200; // delay for half a second
 int ldrPin = A1;
-int threshold = 100; //threshold of LDR lecture
+int threshold = 25; //threshold of LDR reed
 bool rlx = false;
 bool fcs = false;
 bool sprt = false;
@@ -132,5 +132,6 @@ void loop()
         }
     }
   }
-  delay(200);
+  else offLamp();
+  delay(delayval);
 }
