@@ -7,7 +7,7 @@ int status = WL_IDLE_STATUS;          // the Wifi radio's status
 
 // IFTTT setup
 const char *host = "maker.ifttt.com";
-const char *privateKey = "dUhchmZPTCtDh4sHpMOun5";
+const char *privateKey = "ts_gjIT2N7Vq6S3_N4f5p";
 
 
 

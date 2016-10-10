@@ -24,8 +24,10 @@ WiFiClient client;
 
 int delayval = 500; // delay for half a second
 int ldrPin = A1;
-int threshold = 200; //threshold of LDR lecture
-
+int threshold = 100; //threshold of LDR lecture
+bool rlx = false;
+bool fcs = false;
+bool sprt = false;
 /*
 
                     SETUP
@@ -74,43 +76,61 @@ uint16_t s = 0;
 void loop()
 {
   int mood = getPos();
-  if (analogRead(ldrPin) <= threshold) {
-    switch (mood){
+  int ldr = analogRead(ldrPin);
+  Serial.println(ldr);
+  if (ldr <= threshold) {
+    switch (mood) {
 
 
       //**********************
       //relax mood, warm light
-    case 0:
-    {
-      Serial.println("relax");
-      //send_event("relax");
-      f = 0;
-      r = rainbow(20, r);;
-      break;
-    }
+      case 0:
+        {
+          Serial.println("Relax");
+          if (!rlx) {
+            send_event("Relax");
+            rlx = true;
+          }
+          f = 0;
+          r = rainbow(20, r);
+          fcs = false;
+          sprt = false;
+          break;
+        }
 
 
-    //**********************
-    //focus mood, strong light
-  case 1:
-    {
-      Serial.println("focus");
-      //send_event("focus");
-      r = 0;
-      f = focus(f);
-      break;
-    }
+      //**********************
+      //focus mood, strong light
+      case 1:
+        {
+          Serial.println("Focus");
+          if (!fcs) {
+            send_event("Focus");
+            fcs = true;
+          }
+          r = 0;
+          f = focus(f);
+          rlx = false;
+          sprt = false;
+          break;
+        }
 
 
-    //**********************
-    //Sprint  mood, rainbow light
-  case 2:
-    {
-      Serial.println("Sprint");
-      //send_event("sprint");
-      s = sprint(s);
-      break;
+      //**********************
+      //Sprint  mood, rainbow light
+      case 2:
+        {
+          Serial.println("Sprint");
+          if (!sprt) {
+            send_event("Sprint");
+            sprt = true;
+          }
+          s = sprint(s);
+          rlx = false;
+          fcs = false;
+          break;
+        }
     }
   }
-}
+  delay(200);
 }
